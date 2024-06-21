@@ -1,21 +1,23 @@
 <template>
-    <div class="flex flex-col ">
-        <SavedMovies :movies="savedMovies" />
-        <button @click="sendImage">Buscar Sales</button>
-        <div class=" grid md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 grid-cols-2 gap-6">
+    <div class="flex flex-col items-center ">
+        <SavedMovies @delete="deleteSavedMovie" :movies="savedMovies" />
+        <button class=" m-8 w-36 h-12" @click="sendImage">Mostrar Sala</button>
+        <div class="grid md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 grid-cols-3 gap-6">
             <div @click="saveMovie(item.imdbID)"
-                class=" w-36 flex flex-col flex-wrap shadow-lg rounded-md bg-emerald-600" v-for="item in movies"
-                :key="item.imdbID">
-                <div class=" w-36 h-56"><img class=" h-full w-full object-cover" v-bind:src="item.Poster" alt="">
+                class=" items-center hover:shadow-emerald-500 hover:shadow-2xl md:w-36 w-28 flex flex-col flex-wrap shadow-lg rounded-md bg-emerald-600"
+                v-for="item in movies" :key="item.imdbID">
+                <div class=" md:w-36 md:h-56 w-28 h-36"><img class=" h-full w-full object-cover rounded-t-md"
+                        v-bind:src="item.Poster" alt="">
                 </div>
-                <div class=" h-[120px] m-1">
+                <div class=" md:text-base text-sm md:h-[120px] h-24 w-28 md:m-1">
                     <p>{{ item.Title }}</p>
                     <p>{{ item.Year }}</p>
                 </div>
                 <div v-show="showDetails">
                     <p>Hola</p>
                 </div>
-                <button class=" " @click="showDetails = !showDetails">Details</button>
+                <button class=" md:w-[130px] w-[80px] md:text-base text-sm mb-2"
+                    @click="showDetails = !showDetails">Details</button>
 
             </div>
         </div>
@@ -44,18 +46,18 @@ export default {
         this.fetchImage()
 
     },
-    watch:{
-        
+    watch: {
+
     },
 
     methods: {
         saveMovie(id) {
             let savedMovie = this.movies.find(item => item.imdbID == id)
-            this.savedMovies.push(savedMovie)
-            console.log(this.savedMovies);
 
-
-
+            let predicate = (e) => e.imdbID == id
+            if (!this.savedMovies.some(predicate)) {
+                this.savedMovies.push(savedMovie)
+            }
             // for (item in this.movies){
             //     if(item.imbID==id){
             //         this.savedMovie=item
@@ -73,6 +75,15 @@ export default {
         sendImage() {
             this.$emit('image', this.image)
         },
+        deleteSavedMovie(id) {
+            this.savedMovies = this.savedMovies.reduce((acc, movie) => {
+                if (movie.imdbID !== id) {
+                    acc.push(movie);
+                }
+                return acc;
+            }, []);
+            return this.savedMovies
+        }
 
 
 
