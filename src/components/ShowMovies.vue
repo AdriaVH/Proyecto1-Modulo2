@@ -58,11 +58,7 @@ export default {
             if (!this.savedMovies.some(predicate)) {
                 this.savedMovies.push(savedMovie)
             }
-            // for (item in this.movies){
-            //     if(item.imbID==id){
-            //         this.savedMovie=item
-            //         this.savedMovies.push(this.savedMovie)
-            // }}
+
         },
         fetchImage() {
             fetch("https://api.unsplash.com/photos/woman-sitting-on-red-folding-armchair-jLRIsfkWRGo/?client_id=1sRIHf2T8a--OhtqfKLMWJnFxusN-0zzqBsfNhCFeuY")
